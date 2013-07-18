@@ -1,0 +1,71 @@
+<?php
+
+/**
+ * @file
+ * Helper functions for UCLA DR: new login pages and the data node form
+ */
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Minor changes to button lables, etc. on the node/add/data form.
+ */
+function ucladr_helper_form_alter(&$form, $form_state, $form_id) {
+
+  if ($form_id == 'data_node_form') {
+    unset($form["field_sharing_attributes"]["und"]["#options"]["_none"]);
+    $form["field_data_link"]["und"]["add_more"]["#value"] = "Add more link";
+    $form["field_contact_info"]["und"]["add_more"]["#value"] = "Add";
+  }
+
+}
+
+/**
+ * Implements hook_menu().
+ *
+ * Create login paths for node/add/data and update-registry
+ */
+function ucladr_helper_menu() {
+
+  $items['node/add/data/login'] = array(
+    'title'           => 'Register New Data',
+    'page callback'   => '_ucladr_helper_register_data',
+    'access callback' => 'user_is_anonymous',
+    'type'            => MENU_NORMAL_ITEM,
+    'menu_name'       => 'main-menu',
+  );
+
+  $items['update-registry/login'] = array(
+    'title'           => 'Update Registry',
+    'page callback'   => '_ucladr_helper_update_registry',
+    'access callback' => 'user_is_anonymous',
+    'type'            => MENU_NORMAL_ITEM,
+    'menu_name'       => 'main-menu',
+  );
+
+  return $items;
+}
+
+/**
+ * Page Callback: Redirects anonymous user to login page for node/add/data
+ *
+ * When visiting node/add/data/login, redirects user to user/login
+ * and sets destination query parameter of the login page to node/add/data.
+ *
+ * @see ucladr_helper_menu()
+ */
+function _ucladr_helper_register_data() {
+   drupal_goto('user/login', array('query' => array('destination' => 'node/add/data')));
+}
+
+/**
+ * Page Callback: Redirects anonymous user to login page for update-registry
+ *
+ * When visiting update-registry/login, redirects user to user/login
+ * and sets destination query parameter of the login page to update/registry.
+ *
+ * @see ucladr_helper_menu()
+ */
+function _ucladr_helper_update_registry() {
+   drupal_goto('user/login', array('query' => array('destination' => 'update-registry')));
+}

@@ -1,0 +1,5 @@
+name = "Ucladr helper"
+description = "Consists of sitewide implementation of common hook, and functions"
+package = Ucladr
+core = 7.x
+
